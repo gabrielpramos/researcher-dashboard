@@ -4,6 +4,7 @@ import LoginPage from './login-page/login-page';
 import { User } from '@firebase/auth-types';
 import { LocalStorageItems } from '../../constants/browser';
 import Dashboard from '../dashboard/dashboard';
+import { auth } from '../../firebase';
 
 type StsTokenManager = {
   refreshToken: string;
@@ -34,11 +35,13 @@ export const useAuthContext = () => {
   return context;
 };
 
+const INITIAL_AUTH_STATE = {
+  signedIn: false,
+  userInfo: {},
+};
+
 const AuthWall = () => {
-  const [authState, setAuthState] = useState<AuthState>({
-    signedIn: false,
-    userInfo: {},
-  });
+  const [authState, setAuthState] = useState<AuthState>(INITIAL_AUTH_STATE);
 
   useEffect(() => {
     const authStateString =
@@ -47,10 +50,14 @@ const AuthWall = () => {
     if (authStateString.length > 0) {
       const storedAuthStatus = JSON.parse(authStateString) as AuthState;
 
-      setAuthState(storedAuthStatus);
-
-      if (storedAuthStatus.userInfo?.stsTokenManager?.isExpired) {
-        storedAuthStatus.userInfo.getIdToken?.(true);
+      if (
+        storedAuthStatus.userInfo?.stsTokenManager?.expirationTime! < Date.now()
+      ) {
+        setAuthState(INITIAL_AUTH_STATE);
+        localStorage.removeItem(LocalStorageItems.AuthStatus);
+        auth.signOut();
+      } else {
+        setAuthState(storedAuthStatus);
       }
     }
   }, []);
