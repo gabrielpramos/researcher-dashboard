@@ -1,0 +1,44 @@
+.auth-wall-wrapper {
+    height: 100vh;
+    width: 100%;
+  
+    .auth-wall-canvas {
+      background-color: #ff7c00;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: inherit;
+  
+      section {
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        height: 500px;
+        padding: 64px;
+        width: 660px;
+  
+        .logo {
+          justify-content: center;
+          display: flex;
+          width: 100%;
+          margin-bottom: 32px;
+          text-align: center;
+        }
+  
+        .welcome-text {
+          font-size: 32px;
+          font-weight: 500;
+          width: 100%;
+          margin-bottom: 42px;
+          text-align: center;
+        }
+  
+        .login-button-wrapper {
+          align-self: center;
+          display: flex;
+        }
+      }
+    }
+  }
+  
