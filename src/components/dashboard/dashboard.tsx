@@ -4,6 +4,7 @@ import './dashboard.scss';
 import FirstSignInModal from './first-signin-modal/first-signin-modal';
 import { createContext, useContext, useState } from 'react';
 import DetailedListPage from './detailed-list-page/detailed-list-page';
+import ModalsWrapper from './modals-wrapper/modals-wrapper';
 
 export enum View {
   Dashboard = 'Dashboard',
@@ -29,8 +30,6 @@ export const useViewContext = () => {
 
 const Dashboard = () => {
   const [view, setView] = useState<View>(View.Dashboard);
-  const firstInteration =
-    localStorage.getItem('verifiedAccount') !== 'verified';
 
   const updateView = (newView: View) => {
     setView(newView);
@@ -38,13 +37,13 @@ const Dashboard = () => {
 
   return (
     <ViewContext.Provider value={{ currentView: view, updateView }}>
-      <div className='dashboard'>
-        <Navbar />
+      <ModalsWrapper>
+        <div className='dashboard'>
+          <Navbar />
 
-        {view === View.Dashboard ? <Body /> : <DetailedListPage />}
-
-        {firstInteration && <FirstSignInModal />}
-      </div>
+          {view === View.Dashboard ? <Body /> : <DetailedListPage />}
+        </div>
+      </ModalsWrapper>
     </ViewContext.Provider>
   );
 };

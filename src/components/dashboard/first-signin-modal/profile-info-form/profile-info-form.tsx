@@ -4,6 +4,7 @@ import { texts } from '../../../../constants/texts';
 import CreatableSelect from 'react-select/creatable';
 import { MultiValue } from 'react-select';
 import { FormData } from '../first-signin-modal';
+import { MultiValueOption } from '../../../../models/types';
 
 interface ProfileInfoFormProps {
   formData: FormData;
@@ -24,7 +25,7 @@ const ProfileInfoForm: FC<ProfileInfoFormProps> = ({
         <FormLabel>{texts.lattesUrl}</FormLabel>
 
         <Input
-          type='text'
+          type='url'
           variant='outline'
           placeholder={texts.lattesUrlPlaceholder}
           value={lattes}
@@ -69,7 +70,7 @@ const ProfileInfoForm: FC<ProfileInfoFormProps> = ({
           formatCreateLabel={(inputedValue) =>
             `${texts.addNewAlias} ${inputedValue}`
           }
-          onChange={(newValue: MultiValue<{ value: string }>) => {
+          onChange={(newValue: MultiValueOption) => {
             updateFormData({
               ...formData,
               aliases: newValue.map(({ value }) => value),

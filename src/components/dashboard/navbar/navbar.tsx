@@ -1,34 +1,29 @@
 import { texts } from '../../../constants/texts';
-import { useAuthContext } from '../../auth/auth-wall';
-import './navbar.scss';
-import Logo from '../../../assets/cesar-school-logo.png';
-import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { auth } from '../../../firebase';
-import { View, useViewContext } from '../dashboard';
+import { useAuthContext } from '../../auth/auth-wall';
+import NavItems from './nav-items/nav-items';
+import './navbar.scss';
+import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 
 const Navbar = () => {
   const {
     userInfo: { photoURL },
     updateAuthState,
   } = useAuthContext();
-  const { updateView } = useViewContext();
 
   return (
     <nav>
-      <div className='nav-items'>
-        <div className='home-logo'>
-          <img
-            src={Logo}
-            loading='eager'
-            alt={texts.logoAlt}
-            onClick={() => {
-              updateView(View.Dashboard);
-            }}
-          />
-        </div>
+      <NavItems />
 
-        <Button>{texts.totalOfResearches}</Button>
-      </div>
+      <Button
+        type='button'
+        onClick={() => {
+          auth.signOut();
+          updateAuthState({ signedIn: false, userInfo: {} });
+        }}
+      >
+        {texts.signOut}
+      </Button>
 
       <div className='user-section'>
         <Menu>
@@ -49,7 +44,7 @@ const Navbar = () => {
                 updateAuthState({ signedIn: false, userInfo: {} });
               }}
             >
-              Log out
+              {texts.signOut}
             </MenuItem>
           </MenuList>
         </Menu>
