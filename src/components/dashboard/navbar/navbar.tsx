@@ -1,9 +1,9 @@
 import { texts } from '../../../constants/texts';
-import { useAuthContext } from '../../auth/auth-wall';
-import './navbar.scss';
-import Logo from '../../../assets/cesar-school-logo.png';
-import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { auth } from '../../../firebase';
+import { useAuthContext } from '../../auth/auth-wall';
+import NavItems from './nav-items/nav-items';
+import './navbar.scss';
+import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 
 const Navbar = () => {
   const {
@@ -13,11 +13,17 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className='home-logo'>
-        <a href='/'>
-          <img src={Logo} loading='eager' alt={texts.logoAlt} />
-        </a>
-      </div>
+      <NavItems />
+
+      <Button
+        type='button'
+        onClick={() => {
+          auth.signOut();
+          updateAuthState({ signedIn: false, userInfo: {} });
+        }}
+      >
+        {texts.signOut}
+      </Button>
 
       <div className='user-section'>
         <Menu>
@@ -38,7 +44,7 @@ const Navbar = () => {
                 updateAuthState({ signedIn: false, userInfo: {} });
               }}
             >
-              Log out
+              {texts.signOut}
             </MenuItem>
           </MenuList>
         </Menu>

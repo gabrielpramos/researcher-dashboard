@@ -1,5 +1,10 @@
-section {
+.body {
+  height: 100%;
   display: flex;
-  padding: 24px 64px;
-  height: calc(100vh - var(--navbar-size));
+  flex-flow: column;
+  width: calc(100% - var(--navbar-size));
+
+  .chart-section {
+    padding-top: 32px;
+  }
 }
