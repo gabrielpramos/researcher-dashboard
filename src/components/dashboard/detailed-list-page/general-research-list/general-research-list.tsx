@@ -1,11 +1,6 @@
-import {
-  Card,
-  CardHeader,
-  Heading,
-  CardBody,
-} from '@chakra-ui/react';
-import { texts } from '../../../../constants/texts';
+import { Table, TableContainer, Th, Thead, Tr } from '@chakra-ui/react';
 import ResearchInfo, { ResearchInfoData } from './research-info/research-info';
+import './general-resarch-list.scss';
 
 const GeneralResearchList = () => {
   const ResearchInfoList: ResearchInfoData[] = [
@@ -87,17 +82,21 @@ const GeneralResearchList = () => {
   ];
 
   return (
-    <Card width='100%' height='100%' marginLeft='24px'>
-      <CardHeader textAlign='center'>
-        <Heading size='md'>{texts.generalResearchList}</Heading>
-      </CardHeader>
-
-      <CardBody overflow='auto'>
+    <TableContainer>
+      <Table variant='simple' className='table'>
+        <Thead>
+          <Tr>
+            <Th>Author</Th>
+            <Th>Title</Th>
+            <Th>Co-Authors</Th>
+            <Th>Where</Th>
+          </Tr>
+        </Thead>
         {ResearchInfoList.map((data, index) => (
           <ResearchInfo key={`researchInfo-${index}`} data={data} />
         ))}
-      </CardBody>
-    </Card>
+      </Table>
+    </TableContainer>
   );
 };
 

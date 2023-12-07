@@ -1,4 +1,4 @@
 export enum RoutePaths {
-  AuthWall = '/',
-  Dashboard = 'dashboard',
+  AuthGuard = '/',
+  AllPublishes = 'all-publishes',
 }

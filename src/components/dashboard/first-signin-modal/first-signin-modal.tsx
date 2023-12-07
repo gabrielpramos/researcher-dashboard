@@ -10,7 +10,7 @@ import {
   Stack,
   Button,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useAuthContext } from '../../auth/auth-wall';
 import { texts } from '../../../constants/texts';
 import ProfileInfoForm from './profile-info-form/profile-info-form';
@@ -20,11 +20,12 @@ export interface FormData {
   email: string;
   lattes: string;
   aliases: string[];
+  photoUrl: string;
 }
 
 const LATTES_URL_REGEX = /htt(p|ps):\/\/(www\.|)lattes\.cnpq\.br\/[0-9]+/;
 
-const FirstSignInModal = () => {
+const FirstSignInModal: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { userInfo } = useAuthContext();
 
@@ -33,6 +34,7 @@ const FirstSignInModal = () => {
     aliases: [],
     email: userInfo.email!,
     lattes: '',
+    photoUrl: '',
   };
   const [formData, setFormData] = useState<FormData>(initialValue);
   const validForm =
@@ -43,6 +45,7 @@ const FirstSignInModal = () => {
   };
 
   useEffect(() => {
+    setFormData({ ...formData, photoUrl: userInfo.photoURL! });
     onOpen();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -80,7 +83,10 @@ const FirstSignInModal = () => {
             type='button'
             colorScheme='orange'
             isDisabled={!validForm}
-            onClick={onClose}
+            onClick={() => {
+              localStorage.setItem('verifiedAccount', 'verified');
+              onClose();
+            }}
           >
             {texts.submitConfirmation}
           </Button>

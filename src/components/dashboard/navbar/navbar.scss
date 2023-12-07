@@ -1,21 +1,32 @@
 nav {
   background-color: #fff;
   display: flex;
-  flex-flow: row;
+  flex-flow: column;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 16px;
-  height: var(--navbar-size);
-  width: 100%;
+  padding: 16px 4px;
+  height: 100vh;
+
+  .nav-items {
+    display: flex;
+    flex-flow: column;
+    gap: 8px;
+  }
 
   .home-logo {
     img {
+      cursor: pointer;
       height: 80px;
       width: 100px;
     }
   }
 
   .user-section {
+    position: fixed;
+    right: 64px;
+    top: 24px;
+    z-index: 1;
+
     img {
       border-radius: 50%;
       height: 50px;

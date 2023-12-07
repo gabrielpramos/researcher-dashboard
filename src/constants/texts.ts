@@ -18,4 +18,12 @@ export const texts = {
   addNewAlias: 'Adicionar',
   inputAndPressEnterOrTab: 'Digite e pressione enter ou tab para confirmar.',
   submitConfirmation: 'Confirmar',
+  articleYearlyChart: 'Publicações Totais por Ano',
+  topPublishersYear: 'Publicações por Autores',
+  titlesMostRepeated: 'Expressões mais Frequentes nos Títulos',
+  researchMethodDistribution: 'Distribuição de Métodos de Pesquisa',
+  totalOfResearches: 'Total de Trabalhos',
+  articles: 'Articles',
+  publishType: 'Tipos de Publicação',
+  mainAuthors: 'Autores Principais',
 };

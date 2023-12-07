@@ -4,19 +4,30 @@ import './navbar.scss';
 import Logo from '../../../assets/cesar-school-logo.png';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { auth } from '../../../firebase';
+import { View, useViewContext } from '../dashboard';
 
 const Navbar = () => {
   const {
     userInfo: { photoURL },
     updateAuthState,
   } = useAuthContext();
+  const { updateView } = useViewContext();
 
   return (
     <nav>
-      <div className='home-logo'>
-        <a href='/'>
-          <img src={Logo} loading='eager' alt={texts.logoAlt} />
-        </a>
+      <div className='nav-items'>
+        <div className='home-logo'>
+          <img
+            src={Logo}
+            loading='eager'
+            alt={texts.logoAlt}
+            onClick={() => {
+              updateView(View.Dashboard);
+            }}
+          />
+        </div>
+
+        <Button>{texts.totalOfResearches}</Button>
       </div>
 
       <div className='user-section'>
