@@ -3,30 +3,20 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalBody,
-  Stack,
-  ModalFooter,
-  Button,
-  useDisclosure,
   Icon,
   HStack,
   Text,
 } from '@chakra-ui/react';
 
 import { texts } from '../../../../constants/texts';
-import { useEffect } from 'react';
 import { Modals, useModalContext } from '../modals-wrapper';
-import PublushModalForm from './publish-modal-form';
+import PublishModalForm from './publish-modal-form';
 import { GoPlusCircle } from 'react-icons/go';
+import useModalStartup from '../../../../hooks/modal';
 
 const AddPublishModal = () => {
   const { updateModal } = useModalContext();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  useEffect(() => {
-    onOpen();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { isOpen, onClose } = useModalStartup();
 
   return (
     <Modal
@@ -51,7 +41,7 @@ const AddPublishModal = () => {
           </HStack>
         </ModalHeader>
 
-        <PublushModalForm />
+        <PublishModalForm />
       </ModalContent>
     </Modal>
   );

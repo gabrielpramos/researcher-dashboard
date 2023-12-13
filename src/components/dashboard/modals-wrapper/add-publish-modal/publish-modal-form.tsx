@@ -1,178 +1,90 @@
-import {
-  Button,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input,
-  ModalBody,
-  ModalFooter,
-  NumberInput,
-  NumberInputField,
-  Stack,
-  Switch,
-} from '@chakra-ui/react';
+import { FormControl, ModalBody, Stack } from '@chakra-ui/react';
 import { texts } from '../../../../constants/texts';
-import CreatableSelect from 'react-select/creatable';
-import { useState } from 'react';
-import { MultiValueOption, SingleValueOption } from '../../../../models/types';
-import { researchTypes } from '../../../../constants/research-type';
+import { createContext, useContext, useState } from 'react';
+import { initialPublishFormData } from '../../../../constants/initialValues';
+import {
+  PublishArea,
+  PublishTypes,
+  CoAuthors,
+  PlaceOfPublish,
+  Title,
+  MainAuthorFlag,
+  DoiUrl,
+  PublishYear,
+} from './form-fields';
+import HelperText from './form-fields/helper-text';
+import PublishModalFooter from './publish-modal-footer/publish-modal-footer';
 
-interface FormData {
+export interface FormData {
   title: string;
   publishType: string;
+  publishArea: string;
   mainAuthor: boolean;
   doi: string;
   coAuthors: string[];
   publishYear: string;
+  placeOfPublish: string;
+  issn: string;
 }
 
-const PublushModalForm = () => {
-  const [formData, setFormData] = useState<FormData>({
-    title: '',
-    doi: '',
-    publishType: '',
-    mainAuthor: true,
-    coAuthors: [],
-    publishYear: '',
-  });
-  const options: MultiValueOption = researchTypes.map((value) => ({
-    label: value,
-    value,
-  }));
+export const createLabel = (inputedValue: string) =>
+  `${texts.addNew} ${inputedValue}`;
+interface PublishModalFormContextProps {
+  formData: FormData;
+  updateFormData: (newData: Partial<FormData>) => void;
+}
+const PublishModalFormContext = createContext<
+  PublishModalFormContextProps | undefined
+>(undefined);
+
+export const usePublishModalFormContext = () => {
+  const context = useContext(PublishModalFormContext);
+
+  if (!context) {
+    throw new Error(
+      'PublishModalFormContext must be called under the PublishModalForm component.'
+    );
+  }
+
+  return context;
+};
+
+const PublishModalForm = () => {
+  const [formData, setFormData] = useState<FormData>(initialPublishFormData);
+
+  const updateFormData = (newData: Partial<FormData>) => {
+    setFormData({ ...formData, ...newData });
+  };
 
   return (
-    <>
-      <ModalBody>
+    <PublishModalFormContext.Provider value={{ formData, updateFormData }}>
+      <ModalBody maxHeight={500} overflow='auto'>
         <FormControl isRequired>
-          <FormHelperText marginBottom={4}>
-            {texts.titleDescription}
-          </FormHelperText>
+          <HelperText />
 
           <Stack gap={5}>
-            <Stack>
-              <FormLabel htmlFor='publishTypes'>
-                {texts.publishTypeLabel}
-              </FormLabel>
+            <PublishTypes />
 
-              <CreatableSelect
-                id='publishTypes'
-                options={options}
-                placeholder=''
-                formatCreateLabel={(inputedValue) =>
-                  `${texts.addNewAlias} ${inputedValue}`
-                }
-                onChange={(newValue: SingleValueOption) => {
-                  setFormData({
-                    ...formData,
-                    publishType: newValue?.value ?? '',
-                  });
-                }}
-                noOptionsMessage={() => texts.inputAndPressEnterOrTab}
-              />
-              <FormHelperText>{texts.inputAndPressEnterOrTab}</FormHelperText>
-            </Stack>
-            <Stack spacing={0}>
-              <FormLabel>{texts.title}</FormLabel>
+            <PublishArea />
 
-              <Input
-                type='text'
-                onChange={({ target: { value } }) => {
-                  setFormData({ ...formData, title: value });
-                }}
-              />
-            </Stack>
+            <Title />
 
-            <Stack spacing={0}>
-              <FormLabel htmlFor='coAuthors'>{texts.coAuthorsLabel}</FormLabel>
+            <CoAuthors />
 
-              <CreatableSelect
-                id='coAuthors'
-                components={{ DropdownIndicator: null }}
-                isMulti
-                placeholder=''
-                formatCreateLabel={(inputedValue) =>
-                  `${texts.addNewAlias} ${inputedValue}`
-                }
-                onChange={(newValue: MultiValueOption) => {
-                  setFormData({
-                    ...formData,
-                    coAuthors: newValue.map(({ value }) => value),
-                  });
-                }}
-                noOptionsMessage={() => texts.inputAndPressEnterOrTab}
-                openMenuOnFocus
-              />
-              <FormHelperText>{texts.inputAndPressEnterOrTab}</FormHelperText>
-            </Stack>
-            <Stack>
-              <FormLabel htmlFor='placeOfPublish'>
-                {texts.placeOfPublishLabel}
-              </FormLabel>
+            <PlaceOfPublish />
 
-              <CreatableSelect
-                id='placeOfPublish'
-                placeholder=''
-                formatCreateLabel={(inputedValue) =>
-                  `${texts.addNewAlias} ${inputedValue}`
-                }
-                onChange={(newValue: SingleValueOption) => {
-                  setFormData({
-                    ...formData,
-                    publishType: newValue?.value ?? '',
-                  });
-                }}
-                noOptionsMessage={() => texts.inputAndPressEnterOrTab}
-              />
-              <FormHelperText>{texts.inputAndPressEnterOrTab}</FormHelperText>
-            </Stack>
+            <DoiUrl />
 
-            <Stack spacing={0}>
-              <FormLabel requiredIndicator>{texts.doiUrlLabel}</FormLabel>
+            <PublishYear />
 
-              <Input
-                type='text'
-                onChange={({ target: { value } }) => {
-                  setFormData({ ...formData, doi: value });
-                }}
-              />
-            </Stack>
-
-            <Stack spacing={0}>
-              <FormLabel requiredIndicator>{texts.publishYear}</FormLabel>
-
-              <NumberInput
-                onChange={(value) => {
-                  setFormData({ ...formData, publishYear: value });
-                }}
-              >
-                <NumberInputField />
-              </NumberInput>
-            </Stack>
-
-            <Stack display='flex' flexFlow='row' alignItems='end' spacing={0}>
-              <FormLabel htmlFor='mainAuthorFlag' mb='0'>
-                {texts.mainAuthorFlag}
-              </FormLabel>
-
-              <Switch
-                id='mainAuthorFlag'
-                defaultChecked
-                onChange={({ target: { checked } }) => {
-                  setFormData({ ...formData, mainAuthor: checked });
-                }}
-              />
-            </Stack>
+            <MainAuthorFlag />
           </Stack>
         </FormControl>
       </ModalBody>
 
-      <ModalFooter>
-        <Button type='submit' colorScheme='orange' isDisabled>
-          {texts.submitAddPublush}
-        </Button>
-      </ModalFooter>
-    </>
+      <PublishModalFooter />
+    </PublishModalFormContext.Provider>
   );
 };
 
-export default PublushModalForm;
+export default PublishModalForm;
