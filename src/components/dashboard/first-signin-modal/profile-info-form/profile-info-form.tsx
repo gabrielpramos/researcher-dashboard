@@ -2,7 +2,6 @@ import { FormControl, FormLabel, Input, Stack } from '@chakra-ui/react';
 import { FC } from 'react';
 import { texts } from '../../../../constants/texts';
 import CreatableSelect from 'react-select/creatable';
-import { MultiValue } from 'react-select';
 import { FormData } from '../first-signin-modal';
 import { MultiValueOption } from '../../../../models/types';
 
@@ -27,6 +26,7 @@ const ProfileInfoForm: FC<ProfileInfoFormProps> = ({
         <Input
           type='url'
           variant='outline'
+          name='lattes-url'
           placeholder={texts.lattesUrlPlaceholder}
           value={lattes}
           autoComplete='url'
@@ -64,11 +64,11 @@ const ProfileInfoForm: FC<ProfileInfoFormProps> = ({
         <FormLabel>{texts.aliases}</FormLabel>
 
         <CreatableSelect
+          placeholder={texts.select}
           components={{ DropdownIndicator: null }}
           isMulti
-          placeholder=''
           formatCreateLabel={(inputedValue) =>
-            `${texts.addNewAlias} ${inputedValue}`
+            `${texts.addNew} ${inputedValue}`
           }
           onChange={(newValue: MultiValueOption) => {
             updateFormData({

@@ -1,10 +1,10 @@
 import Body from './body/body';
 import Navbar from './navbar/navbar';
 import './dashboard.scss';
-import FirstSignInModal from './first-signin-modal/first-signin-modal';
 import { createContext, useContext, useState } from 'react';
 import DetailedListPage from './detailed-list-page/detailed-list-page';
 import ModalsWrapper from './modals-wrapper/modals-wrapper';
+import DataWrapper from './data-wrapper/data-wrapper';
 
 export enum View {
   Dashboard = 'Dashboard',
@@ -37,13 +37,15 @@ const Dashboard = () => {
 
   return (
     <ViewContext.Provider value={{ currentView: view, updateView }}>
-      <ModalsWrapper>
-        <div className='dashboard'>
-          <Navbar />
+      <DataWrapper>
+        <ModalsWrapper>
+          <div className='dashboard'>
+            <Navbar />
 
-          {view === View.Dashboard ? <Body /> : <DetailedListPage />}
-        </div>
-      </ModalsWrapper>
+            {view === View.Dashboard ? <Body /> : <DetailedListPage />}
+          </div>
+        </ModalsWrapper>
+      </DataWrapper>
     </ViewContext.Provider>
   );
 };

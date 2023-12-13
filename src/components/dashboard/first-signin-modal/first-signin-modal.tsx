@@ -4,7 +4,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
   Text,
   ModalFooter,
   Stack,
@@ -14,6 +13,13 @@ import { FC, useEffect, useState } from 'react';
 import { useAuthContext } from '../../auth/auth-wall';
 import { texts } from '../../../constants/texts';
 import ProfileInfoForm from './profile-info-form/profile-info-form';
+import useFetch from '../../../hooks/fetch';
+import { useLoadingContext } from '../../loading/global-loading';
+import {
+  EndpointType,
+  getURL,
+} from '../../../constants/request-urls/request-urls';
+import useModalStartup from '../../../hooks/modal';
 
 export interface FormData {
   name: string;
@@ -26,8 +32,12 @@ export interface FormData {
 const LATTES_URL_REGEX = /htt(p|ps):\/\/(www\.|)lattes\.cnpq\.br\/[0-9]+/;
 
 const FirstSignInModal: FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const { userInfo } = useAuthContext();
+  const { isOpen, onClose } = useModalStartup(() => {
+    setFormData({ ...formData, photoUrl: userInfo.photoURL! });
+  });
+  const { toggleLoading } = useLoadingContext();
+  const fetchFunction = useFetch();
 
   const initialValue: FormData = {
     name: userInfo.displayName!,
@@ -44,11 +54,37 @@ const FirstSignInModal: FC = () => {
     setFormData(newFormData);
   };
 
-  useEffect(() => {
-    setFormData({ ...formData, photoUrl: userInfo.photoURL! });
-    onOpen();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const onSubmit = () => {
+    const request = new Request(getURL({ endpointType: EndpointType.Collab }), {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        lattes: formData.lattes,
+        aliases: formData.aliases,
+        profile_pic_url: formData.photoUrl,
+      }),
+    });
+
+    toggleLoading(true);
+
+    fetchFunction(request)
+      .then((data) => {
+        localStorage.setItem('verifiedAccount', 'verified');
+        onClose();
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        toggleLoading(false);
+      });
+  };
 
   return (
     <Modal
@@ -80,13 +116,10 @@ const FirstSignInModal: FC = () => {
         </ModalBody>
         <ModalFooter>
           <Button
-            type='button'
+            type='submit'
             colorScheme='orange'
             isDisabled={!validForm}
-            onClick={() => {
-              localStorage.setItem('verifiedAccount', 'verified');
-              onClose();
-            }}
+            onClick={onSubmit}
           >
             {texts.submitConfirmation}
           </Button>
