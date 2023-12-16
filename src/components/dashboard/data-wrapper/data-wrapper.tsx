@@ -9,6 +9,8 @@ import {
 import {
   AreasData,
   PlacesOfPublishData,
+  PublishesResponseData,
+  PublishesData,
   TypesData,
   UserData,
 } from '../../../models/types';
@@ -22,14 +24,23 @@ import { areasRequestSettings } from './data-request-settings/area-request-setti
 import { initialDataContextValues } from '../../../constants/initialValues';
 import { typesRequestSettings } from './data-request-settings/types-request-settings';
 import { placesOfPublishRequestSettings } from './data-request-settings/place-of-publish-request-settings';
+import { getPublishRequestSettings } from './data-request-settings/publish-request-settings';
+import { mapPublishResponse } from './data-maps';
 
-export interface DataContextProps {
+export interface DataContextValuesProps {
+  publishesData: PublishesData;
   userData: UserData;
   usersData: UserData[];
   areasData: AreasData;
   typesData: TypesData;
   placesOfPublishData: PlacesOfPublishData;
 }
+
+export interface DataContextProps extends DataContextValuesProps {
+  refetch: () => void;
+}
+
+const REDO_COUNT_INCREMENT_VALUE = 1;
 
 const DataContext = createContext<DataContextProps | undefined>(undefined);
 
@@ -49,13 +60,19 @@ const DataWrapper: FC<HTMLAttributes<HTMLElement>> = ({ children }) => {
   const {
     userInfo: { email },
   } = useAuthContext();
-  const [value, setValue] = useState<DataContextProps>(
+  const [value, setValue] = useState<DataContextValuesProps>(
     initialDataContextValues
   );
   const fetchFunction = useFetch();
+  const [refetchCount, setRefetchCount] = useState<number>(0);
+
+  const refetch = () => {
+    setRefetchCount(refetchCount + REDO_COUNT_INCREMENT_VALUE);
+  };
 
   useEffect(() => {
     Promise.all([
+      fetchFunction<PublishesResponseData>(getPublishRequestSettings()),
       fetchFunction<UserData>(userRequestSettings(email!)),
       fetchFunction<UserData[]>(usersRequestSettings()),
       fetchFunction<AreasData>(areasRequestSettings()),
@@ -63,6 +80,7 @@ const DataWrapper: FC<HTMLAttributes<HTMLElement>> = ({ children }) => {
       fetchFunction<PlacesOfPublishData>(placesOfPublishRequestSettings()),
     ]).then(
       ([
+        publishResponse,
         userResponse,
         usersResponse,
         areasResponse,
@@ -71,6 +89,7 @@ const DataWrapper: FC<HTMLAttributes<HTMLElement>> = ({ children }) => {
       ]) => {
         setValue({
           ...value,
+          publishesData: publishResponse.map(mapPublishResponse),
           userData: userResponse,
           usersData: usersResponse,
           areasData: areasResponse,
@@ -80,8 +99,13 @@ const DataWrapper: FC<HTMLAttributes<HTMLElement>> = ({ children }) => {
       }
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
+  }, [refetchCount]);
+
+  return (
+    <DataContext.Provider value={{ ...value, refetch }}>
+      {children}
+    </DataContext.Provider>
+  );
 };
 
 export default DataWrapper;

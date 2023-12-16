@@ -1,14 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
-import LoginPage from './login-page/login-page';
 import { User } from '@firebase/auth-types';
 import { LocalStorageItems } from '../../constants/browser';
-import Dashboard from '../dashboard/dashboard';
 import { auth } from '../../firebase';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { RoutePaths } from '../../constants/routes';
 import AuthGuard from './auth-guard/auth-guard';
-import DetailedListPage from '../dashboard/detailed-list-page/detailed-list-page';
 
 type StsTokenManager = {
   refreshToken: string;

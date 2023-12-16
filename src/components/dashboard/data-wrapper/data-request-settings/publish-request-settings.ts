@@ -7,19 +7,18 @@ export type AddPublishBodyType = {
   title: string;
   type_id: string;
   area_id: string;
-  main_author: boolean;
   doi: string;
   issn: string;
   author_id: string;
   coauthors_id: string[];
   publication_date: string;
   place_id: string;
+  is_owner: boolean;
 };
 
 export type PublishResponseType = {
   title: string;
   doi: string;
-  main_author: boolean;
   issn: string;
   author_id: string;
   coauthors_id: string;
@@ -57,5 +56,6 @@ export const addPublishRequestSettings = (body: AddPublishBodyType) =>
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(body),
     }
   );

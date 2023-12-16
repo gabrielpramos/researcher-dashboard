@@ -11,6 +11,7 @@ const Title = () => {
 
       <Input
         type='text'
+        id='title'
         name='title'
         onChange={({ target: { value } }) => {
           updateFormData({ title: value });

@@ -22,7 +22,9 @@ export const placesOfPublishRequestSettings = () =>
     }
   );
 
-export const addAreaRequestSettings = (body: AddPlaceOfPublishBodyType) =>
+export const addPlaceOfPublishRequestSettings = (
+  body: AddPlaceOfPublishBodyType
+) =>
   new Request(
     getURL({
       endpointType: EndpointType.Places,

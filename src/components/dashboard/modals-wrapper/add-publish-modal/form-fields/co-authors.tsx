@@ -1,9 +1,9 @@
 import { FormHelperText, FormLabel, Stack } from '@chakra-ui/react';
-import CreatableSelect from 'react-select/creatable';
-import { createLabel, usePublishModalFormContext } from '../publish-modal-form';
+import { usePublishModalFormContext } from '../publish-modal-form';
 import { MultiValueOption } from '../../../../../models/types';
 import { texts } from '../../../../../constants/texts';
 import { useDataContext } from '../../../data-wrapper/data-wrapper';
+import ReactSelect from 'react-select';
 
 const CoAuthors = () => {
   const { updateFormData } = usePublishModalFormContext();
@@ -11,27 +11,29 @@ const CoAuthors = () => {
 
   const options: MultiValueOption = usersData
     .filter(({ name }) => name !== userData.name)
-    .flatMap(({ name, aliases }) => {
-      const flattenValue = [name];
+    .flatMap(({ name, aliases, id }) => {
+      const flattenValue = [{ name, id }];
 
       if (aliases) {
-        return [...flattenValue, ...aliases];
+        const mappedAliases = aliases.map((name) => ({ name, id }));
+        return [...flattenValue, ...mappedAliases];
       }
       return flattenValue;
     })
-    .map((name) => ({ label: name, value: name }));
+    .map(({ name, id }) => ({ label: name, value: id }));
 
   return (
     <Stack spacing={0}>
-      <FormLabel htmlFor='coAuthors'>{texts.coAuthorsLabel}</FormLabel>
+      <FormLabel htmlFor='coAuthors' requiredIndicator>
+        {texts.coAuthorsLabel}
+      </FormLabel>
 
-      <CreatableSelect
+      <ReactSelect
         placeholder={texts.select}
         id='coAuthors'
         components={{ DropdownIndicator: null }}
         isMulti
         options={options}
-        formatCreateLabel={createLabel}
         onChange={(newValue: MultiValueOption) => {
           updateFormData({
             coAuthors: newValue.map(({ value }) => value),

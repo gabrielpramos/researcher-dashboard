@@ -8,9 +8,7 @@ const DoiUrl = () => {
   return (
     <Flex width='100%' gap={4}>
       <Stack spacing={0} width='100%'>
-        <FormLabel requiredIndicator htmlFor='numberOfISSN'>
-          {texts.issnNumberLabel}
-        </FormLabel>
+        <FormLabel htmlFor='numberOfISSN'>{texts.issnNumberLabel}</FormLabel>
 
         <Input
           type='text'

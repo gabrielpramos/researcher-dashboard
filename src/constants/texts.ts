@@ -43,4 +43,5 @@ export const texts = {
   cancel: 'Cancelar',
   clickHereToCheck: 'Clique aqui para checar o seu Lattes',
   select: 'Selecione...',
+  addPublishSuccess: 'Publicação adicionada com sucesso!',
 };

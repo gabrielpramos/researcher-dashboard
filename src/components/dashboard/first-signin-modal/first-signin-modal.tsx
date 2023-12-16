@@ -9,7 +9,7 @@ import {
   Stack,
   Button,
 } from '@chakra-ui/react';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { useAuthContext } from '../../auth/auth-wall';
 import { texts } from '../../../constants/texts';
 import ProfileInfoForm from './profile-info-form/profile-info-form';
@@ -79,7 +79,7 @@ const FirstSignInModal: FC = () => {
         onClose();
       })
       .catch((e) => {
-        console.log(e);
+        console.error(e);
       })
       .finally(() => {
         toggleLoading(false);

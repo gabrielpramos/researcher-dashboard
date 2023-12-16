@@ -1,19 +1,4 @@
-import {
-  Box,
-  Card,
-  Flex,
-  Image,
-  Table,
-  TableCaption,
-  TableContainer,
-  Tbody,
-  Td,
-  Text,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-} from '@chakra-ui/react';
+import { Box, Flex, Image, Tbody, Td, Text, Tr } from '@chakra-ui/react';
 import { FC } from 'react';
 
 export type ResearchInfoData = {

@@ -9,16 +9,20 @@ import {
   Tooltip,
   Text,
 } from '@chakra-ui/react';
-import { dashboardCards } from '../../../../constants/dashboard-cards';
+
 import { View, useViewContext } from '../../dashboard';
 import { FiExternalLink } from 'react-icons/fi';
+import { useDataContext } from '../../data-wrapper/data-wrapper';
+import { summaryCardsMapping } from './summary-cards-mapping';
 
 const SummaryCards = () => {
   const { updateView } = useViewContext();
+  const { publishesData } = useDataContext();
+  const dashboardCardsMap = summaryCardsMapping({ publishesData });
 
   return (
     <Flex height='160px' gap={8} width='100%' justifyContent='center'>
-      {dashboardCards.map(({ title, total, label }, index) => (
+      {dashboardCardsMap.map(({ title, total, label }, index) => (
         <Card key={index} width='320px'>
           <CardHeader>
             <Flex width='100%' justifyContent='space-between'>

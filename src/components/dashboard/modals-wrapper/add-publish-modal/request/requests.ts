@@ -5,6 +5,7 @@ import {
   TypesData,
 } from '../../../../../models/types';
 import { addAreaRequestSettings } from '../../../data-wrapper/data-request-settings/area-request-settings';
+import { addPlaceOfPublishRequestSettings } from '../../../data-wrapper/data-request-settings/place-of-publish-request-settings';
 import {
   AddPublishBodyType,
   addPublishRequestSettings,
@@ -67,7 +68,9 @@ const getPlaceOfPublishId: GetPublishParam<PlaceOfPublishParams> = async ({
   selectedPlaceOfPublish,
 }) => {
   if (!placesOfPublishData.find(({ id }) => id === selectedPlaceOfPublish)) {
-    return fetch(addAreaRequestSettings({ area: selectedPlaceOfPublish }))
+    return fetch(
+      addPlaceOfPublishRequestSettings({ place_name: selectedPlaceOfPublish })
+    )
       .then((response) => response.json())
       .then((data: PublishType) => data.id);
   }
@@ -77,9 +80,13 @@ const getPlaceOfPublishId: GetPublishParam<PlaceOfPublishParams> = async ({
   });
 };
 
-export const addPublish = (params: AddPublishBodyType) => {
-  fetch(addPublishRequestSettings(params));
-};
+export const addPublish = (params: AddPublishBodyType) =>
+  fetch(addPublishRequestSettings(params)).then((response) => {
+    if (response.status !== 200) {
+      throw new Error('Something went wrong, please check the response');
+    }
+    return response.json();
+  });
 
 export const addNewInputs = async ({
   typesData,
