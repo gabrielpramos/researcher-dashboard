@@ -6,6 +6,34 @@ export type SingleValueOption = SingleValue<Value>;
 
 export type MultiValueOption = MultiValue<Value>;
 
+export type UserResponsePublishData = {
+  title: string;
+  issn: string;
+  author_is_owner: boolean;
+  area_id: string;
+  place_id: string;
+  id: string;
+  doi: string;
+  author_id: string;
+  type_id: string;
+  publication_date: string;
+  place_of_publication: PlaceOfPublishData;
+  area: PublishArea;
+  type: PublishType;
+};
+
+export type UserResponseData = {
+  name: string;
+  id: string;
+  lattes: string;
+  profile_pic_url: string;
+  email: string;
+  aliases: string[];
+  papers: UserResponsePublishData[];
+};
+
+export type UsersResponseData = UserResponseData[];
+
 export type UserData = {
   id: string;
   name: string;
@@ -13,13 +41,22 @@ export type UserData = {
   lattes: string;
   aliases: string[];
   photoUrl: string;
+  papers: UserResponsePublishData[];
 };
 
-export type PublishArea = { area: string; id: string };
+export type PublishArea = {
+  area: string;
+  id: string;
+  papers: UserResponsePublishData[];
+};
 
 export type AreasData = PublishArea[];
 
-export type PublishType = { type: string; id: string };
+export type PublishType = {
+  type: string;
+  id: string;
+  papers: UserResponsePublishData[];
+};
 
 export type TypesData = PublishType[];
 

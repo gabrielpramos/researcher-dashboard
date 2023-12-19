@@ -22,7 +22,7 @@ export const texts = {
   articleYearlyChart: 'Publicações Totais por Ano',
   topPublishersYear: 'Publicações por Autores',
   titlesMostRepeated: 'Expressões mais Frequentes nos Títulos',
-  researchMethodDistribution: 'Distribuição de Métodos de Pesquisa',
+  researchTypeDistribution: 'Distribuição de Tipos de Pesquisa',
   totalOfResearches: 'Total de Trabalhos',
   articles: 'Artigos',
   publishType: 'Tipos de Publicação',

@@ -1,5 +1,5 @@
 import { Card, CardHeader, Stack, Heading, CardBody } from '@chakra-ui/react';
-import { texts } from '../../../../constants/texts';
+import { texts } from '../../../../../constants/texts';
 import {
   Bar,
   BarChart,
@@ -11,41 +11,24 @@ import {
   YAxis,
 } from 'recharts';
 import './researchers-rank-chart.scss';
-import CustomizedYAxisTick from '../../../recharts/customized-yaxis-tick';
+import CustomizedYAxisTick from '../../../../recharts/customized-yaxis-tick';
+import { useDataContext } from '../../../data-wrapper/data-wrapper';
 
 const CHART_DATA_KEY = 'Publicações';
 
 const ResearchersRankChart = () => {
-  const data = [
-    {
-      name: 'Ronnie Santos',
-      [CHART_DATA_KEY]: 14,
-      amt: 14,
-    },
-    {
-      name: 'Felipe Fernandes',
-      [CHART_DATA_KEY]: 13,
-      amt: 13,
-    },
-    {
-      name: 'Gabriel Ramos',
-      [CHART_DATA_KEY]: 5,
-      amt: 5,
-    },
-    {
-      name: 'César França',
-      [CHART_DATA_KEY]: 13,
-      amt: 13,
-    },
-    {
-      name: 'Lucas Job',
-      [CHART_DATA_KEY]: 10,
-      amt: 10,
-    },
-  ].sort(
-    ({ [CHART_DATA_KEY]: amountA }, { [CHART_DATA_KEY]: amountB }) =>
-      amountB - amountA
-  );
+  const { usersData } = useDataContext();
+  const data = usersData
+    .filter(({ papers }) => papers.length > 0)
+    .map(({ name, papers }) => ({
+      name,
+      [CHART_DATA_KEY]: papers.length,
+      amt: papers.length,
+    }))
+    .sort(
+      ({ [CHART_DATA_KEY]: amountA }, { [CHART_DATA_KEY]: amountB }) =>
+        amountB - amountA
+    );
 
   return (
     <Card height='400px' width='100%'>

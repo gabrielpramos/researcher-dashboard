@@ -14,6 +14,7 @@ import { View, useViewContext } from '../../dashboard';
 import { FiExternalLink } from 'react-icons/fi';
 import { useDataContext } from '../../data-wrapper/data-wrapper';
 import { summaryCardsMapping } from './summary-cards-mapping';
+import 'core-js/actual/array/group-by';
 
 const SummaryCards = () => {
   const { updateView } = useViewContext();
@@ -24,7 +25,7 @@ const SummaryCards = () => {
     <Flex height='160px' gap={8} width='100%' justifyContent='center'>
       {dashboardCardsMap.map(({ title, total, label }, index) => (
         <Card key={index} width='320px'>
-          <CardHeader>
+          <CardHeader height='88px'>
             <Flex width='100%' justifyContent='space-between'>
               <Heading size='md'>{title}</Heading>
 

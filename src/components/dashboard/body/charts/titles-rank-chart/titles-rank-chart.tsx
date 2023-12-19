@@ -1,5 +1,5 @@
 import { Card, CardHeader, Stack, Heading, CardBody } from '@chakra-ui/react';
-import { texts } from '../../../../constants/texts';
+import { texts } from '../../../../../constants/texts';
 import {
   Bar,
   BarChart,

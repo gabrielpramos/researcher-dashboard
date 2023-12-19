@@ -16,7 +16,7 @@ import {
   Icon,
   Stack,
 } from '@chakra-ui/react';
-import { texts } from '../../../../constants/texts';
+import { texts } from '../../../../../constants/texts';
 import { BsBarChartFill } from 'react-icons/bs';
 
 const CHART_DATA_KEY = 'Publicações';

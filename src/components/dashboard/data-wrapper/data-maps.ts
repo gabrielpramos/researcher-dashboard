@@ -1,6 +1,12 @@
-import { PublishResponseData } from '../../../models/types';
+import {
+  PublishData,
+  PublishResponseData,
+  UserData,
+  UserResponseData,
+} from '../../../models/types';
 
-export const mapPublishResponse = ({
+type MapPublishResponse = (params: PublishResponseData) => PublishData;
+export const mapPublishResponse: MapPublishResponse = ({
   title,
   issn,
   author_is_owner,
@@ -15,7 +21,7 @@ export const mapPublishResponse = ({
   place_of_publication,
   area,
   type,
-}: PublishResponseData) => ({
+}) => ({
   title: title,
   issn: issn,
   authorIsOwner: author_is_owner,
@@ -30,4 +36,10 @@ export const mapPublishResponse = ({
   placeOfPublication: place_of_publication,
   area: area,
   type: type,
+});
+
+export type MapUser = (userResponseData: UserResponseData) => UserData;
+export const mapUser: MapUser = ({ profile_pic_url, ...restData }) => ({
+  ...restData,
+  photoUrl: profile_pic_url,
 });

@@ -1,5 +1,5 @@
 import { Card, CardHeader, Stack, Heading, CardBody } from '@chakra-ui/react';
-import { texts } from '../../../../constants/texts';
+import { texts } from '../../../../../constants/texts';
 import {
   ResponsiveContainer,
   PieChart,
@@ -8,16 +8,16 @@ import {
   PieLabelRenderProps,
   Cell,
 } from 'recharts';
+import { useDataContext } from '../../../data-wrapper/data-wrapper';
 
-const ResearchMethodDistributionChart = () => {
-  const data = [
-    { name: 'Survey', value: 30 },
-    { name: 'Revisão de Literatura', value: 29 },
-    { name: 'Pesquisa-Ação', value: 11 },
-    { name: 'Experimento', value: 16 },
-    { name: 'Design Research', value: 117 },
-    { name: 'Estudo de Caso', value: 45 },
-  ];
+const PublishTypePiechart = () => {
+  const { typesData } = useDataContext();
+  const data = typesData
+    .filter(({ papers }) => papers.length > 0)
+    .map(({ type, papers }) => ({
+      name: type,
+      value: papers.length,
+    }));
 
   const renderCustomizedLabel = ({ percent, name }: PieLabelRenderProps) => {
     return `${name}: ${(percent! * 100).toFixed(0)}%`;
@@ -27,7 +27,7 @@ const ResearchMethodDistributionChart = () => {
     <Card w='100%' marginLeft={4}>
       <CardHeader>
         <Stack display='flex' flexFlow='row' alignItems='center'>
-          <Heading size='md'>{texts.researchMethodDistribution}</Heading>
+          <Heading size='md'>{texts.researchTypeDistribution}</Heading>
         </Stack>
       </CardHeader>
 
@@ -57,4 +57,4 @@ const ResearchMethodDistributionChart = () => {
   );
 };
 
-export default ResearchMethodDistributionChart;
+export default PublishTypePiechart;

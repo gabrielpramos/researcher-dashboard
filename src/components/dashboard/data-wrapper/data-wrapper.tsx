@@ -13,6 +13,8 @@ import {
   PublishesData,
   TypesData,
   UserData,
+  UsersResponseData,
+  UserResponseData,
 } from '../../../models/types';
 import useFetch from '../../../hooks/fetch';
 import { useAuthContext } from '../../auth/auth-wall';
@@ -25,7 +27,7 @@ import { initialDataContextValues } from '../../../constants/initialValues';
 import { typesRequestSettings } from './data-request-settings/types-request-settings';
 import { placesOfPublishRequestSettings } from './data-request-settings/place-of-publish-request-settings';
 import { getPublishRequestSettings } from './data-request-settings/publish-request-settings';
-import { mapPublishResponse } from './data-maps';
+import { mapPublishResponse, mapUser } from './data-maps';
 
 export interface DataContextValuesProps {
   publishesData: PublishesData;
@@ -73,8 +75,8 @@ const DataWrapper: FC<HTMLAttributes<HTMLElement>> = ({ children }) => {
   useEffect(() => {
     Promise.all([
       fetchFunction<PublishesResponseData>(getPublishRequestSettings()),
-      fetchFunction<UserData>(userRequestSettings(email!)),
-      fetchFunction<UserData[]>(usersRequestSettings()),
+      fetchFunction<UserResponseData>(userRequestSettings(email!)),
+      fetchFunction<UsersResponseData>(usersRequestSettings()),
       fetchFunction<AreasData>(areasRequestSettings()),
       fetchFunction<TypesData>(typesRequestSettings()),
       fetchFunction<PlacesOfPublishData>(placesOfPublishRequestSettings()),
@@ -90,8 +92,8 @@ const DataWrapper: FC<HTMLAttributes<HTMLElement>> = ({ children }) => {
         setValue({
           ...value,
           publishesData: publishResponse.map(mapPublishResponse),
-          userData: userResponse,
-          usersData: usersResponse,
+          userData: mapUser(userResponse),
+          usersData: usersResponse.map(mapUser),
           areasData: areasResponse,
           typesData: typesResponse,
           placesOfPublishData: placeOfPublishResponse,
